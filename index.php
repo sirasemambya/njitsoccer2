@@ -134,7 +134,7 @@
 										<input type="password" class="form-control" id="password" name="password" required data-toggle="tooltip" data-placement="left"/>
 										<span class="text-danger"><small></small></span>
 									</div>
-									<button type="submit" class="btn btn-success btn-block" id="lsubmit" name="lsubmit" href="https://web.njit.edu/~sbs43/NJITsoccer2/signup.php" >Log In</button>
+									<button type="submit" class="btn btn-success btn-block" id="lsubmit" name="lsubmit">Log In</button>
 								</form>
 								<hr class="separator">
 								<p class="text-center" data-html="true"><br>Don't have an account?<a href="signup.php">&nbsp;Sign up here</a></p>
