@@ -29,21 +29,6 @@
 			$sch_statement->execute();
 			$sch_rowCount = $sch_statement->fetchColumn(0);
 
-			# Check to see if the email and password are connected to a player account
-			$pl_sql = "SELECT COUNT(*) FROM eligibility AS e INNER JOIN players AS p ON e.PlayerID=p.PlayerID WHERE StudentEmail=:email AND Password=:password;";
-			$pl_statement = $pdo->prepare($pl_sql);
-			$pl_statement->bindValue(':email', $email);
-			$pl_statement->bindValue(':password', $password);
-			$pl_statement->execute();
-			$pl_rowCount = $pl_statement->fetchColumn(0);
-
-			# Check to see if the email and password are connected to a referee account
-			$ref_sql = "SELECT COUNT(*) FROM referees WHERE Email=:email AND Password=:password;";
-			$ref_statement = $pdo->prepare($ref_sql);
-			$ref_statement->bindValue(':email', $email);
-			$ref_statement->bindValue(':password', $password);
-			$ref_statement->execute();
-			$ref_rowCount = $ref_statement->fetchColumn(0);
 
 			if($sch_rowCount == 1) {
 				$ss_sql = "SELECT * FROM schoolaccount WHERE Email=:email AND Password=:password;";
@@ -57,38 +42,7 @@
 				$_SESSION['schoolname'] = $ss_row['SchoolName'];
 				$pdo = null;
 				header('Location: team.php');
-			} elseif ($pl_rowCount == 1) {
-				$ps_sql = "SELECT * FROM eligibility AS e INNER JOIN players AS p ON e.PlayerID=p.PlayerID WHERE StudentEmail=:email AND Password=:password;";
-				$ps_statement = $pdo->prepare($ps_sql);
-				$ps_statement->bindValue(':email', $email);
-				$ps_statement->bindValue(':password', $password);
-				$ps_statement->execute();
-				$ps_row = $ps_statement->fetch(PDO::FETCH_ASSOC);
-
-				$_SESSION['playerid'] = $ps_row['PlayerID'];
-				$_SESSION['playerfirst'] = $ps_row['First'];
-				$_SESSION['playerlast'] = $ps_row['Last'];
-				$_SESSION['playeremail'] = $ps_row['StudentEmail'];
-				$_SESSION['playerschool'] = $ps_row['SchoolID'];
-				$pdo = null;
-				header('Location: myteams.php');
-			} elseif ($ref_rowCount == 1) {
-				$rs_sql = "SELECT * FROM referees WHERE Email=:email AND Password=:password;";
-				$rs_statement = $pdo->prepare($rs_sql);
-				$rs_statement->bindValue(':email', $email);
-				$rs_statement->bindValue(':password', $password);
-				$rs_statement->execute();
-				$rs_row = $rs_statement->fetch(PDO::FETCH_ASSOC);
-
-				$_SESSION['refemail'] = $rs_row['Email'];
-				$_SESSION['reffirst'] = $rs_row['First'];
-				$_SESSION['reflast'] = $rs_row['Last'];
-				$_SESSION['refschool'] = $rs_row['SchoolID'];
-				$pdo = null;
-				header('Location: schedule.php');
-			} else {
-				header('Location: teams.php');
-			}
+			} 
 
 			$pdo = null;
 		}
