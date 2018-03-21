@@ -6,13 +6,11 @@
 	include($filepath . "autoload.php");
 	autoload($filepath);
 
-	if(isset($_SESSION['schoolid'])) {
+	if(isset($_SESSION['schoolaccount'])) {
 		header("Location: team.php");
-	} elseif(isset($_SESSION['playerid'])) {
-		header("Location: myteams.php");
-	} elseif(isset($_SESSION['refemail'])) {
-		header("Location: schedule.php");
-	}
+	} elseif(isset($_SESSION['coachaccount'])) {
+		header("Location: teamscoach.php");
+	} 
 
 	if(isset($_POST['lsubmit'])) {
 		$email = $_POST['email'];
@@ -42,7 +40,7 @@
 				$_SESSION['schoolname'] = $ss_row['SchoolName'];
 				$pdo = null;
 				header('Location: team.php');
-			} 
+			}
 
 			$pdo = null;
 		}
