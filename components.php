@@ -76,7 +76,7 @@
 	<?php } elseif($type=='home') {?>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="" data-toggle="modal" data-target="#login">Log In</a></li>
-					<li><a href="signup.php">Sign Up</a></li>
+					<li><a href="https://web.njit.edu/~sbs43/NJITsoccer2/signup.php">Sign Up</a></li>
 				</ul>
 	<?php }?>
 			</div>

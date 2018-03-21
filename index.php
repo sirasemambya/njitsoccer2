@@ -126,7 +126,7 @@
 								<form method="post" action="index.php" id="loginform">
 									<div class="form-group">
 										<label class="control-label" for="email">Email Address</label>
-										<input type="email" class="form-control" id="email" name="email" required data-toggle="tooltip" data-placement="left"/>
+										<input type="email" class="form-control" id="email" name="email" required data-toggle="tooltip" data-placement="left" title="Enter bsmith@tech.edu for school account and justinb31@tech.edu for player account"/>
 										<span class="text-danger"><small></small></span>
 									</div>
 									<div class="form-group">
@@ -134,7 +134,7 @@
 										<input type="password" class="form-control" id="password" name="password" required data-toggle="tooltip" data-placement="left"/>
 										<span class="text-danger"><small></small></span>
 									</div>
-									<button type="submit" class="btn btn-success btn-block" id="lsubmit" name="lsubmit">Log In</button>
+									<button type="submit" class="btn btn-success btn-block" id="lsubmit" name="lsubmit" href="https://web.njit.edu/~sbs43/NJITsoccer2/signup.php" >Log In</button>
 								</form>
 								<hr class="separator">
 								<p class="text-center" data-html="true"><br>Don't have an account?<a href="signup.php">&nbsp;Sign up here</a></p>
@@ -165,7 +165,7 @@
 				<br>
 				<p>One stop location for everything NJIT soccer. Here you are able to view scores and stats.</p>
 				<br>
-				<p><a href="signup.php" class="btn btn-primary btn-lg">Get Started &raquo;</a></p>
+				<p><a href="https://web.njit.edu/~sbs43/NJITsoccer2/signup.php" class="btn btn-primary btn-lg">Get Started &raquo;</a></p>
 			</div>
 		</div>
 		<div class="row">
