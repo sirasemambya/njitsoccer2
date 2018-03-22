@@ -2,23 +2,18 @@
 	ob_start();
 	session_start();
 	$filepath = "";
-
 	include($filepath . "autoload.php");
 	autoload($filepath);
-
-	if(isset($_SESSION['schoolaccount'])) {
+	if(isset($_SESSION['schoolname'])) {
 		header("Location: team.php");
-	} elseif(isset($_SESSION['coachaccount'])) {
+	} elseif(isset($_SESSION['ID'])) {
 		header("Location: teamscoach.php");
-	} 
-
+	}
 	if(isset($_POST['lsubmit'])) {
 		$email = $_POST['email'];
 		$password = $_POST['password'];
-
 		try {
 			include($filepath . "connect-to-db.php");
-
 			# Check to see if the email and password are connected to a school account
 			$sch_sql = "SELECT COUNT(*) FROM schoolaccount WHERE Email=:email AND Password=:password;";
 			$sch_statement = $pdo->prepare($sch_sql);
@@ -26,30 +21,58 @@
 			$sch_statement->bindValue(':password', $password);
 			$sch_statement->execute();
 			$sch_rowCount = $sch_statement->fetchColumn(0);
-
+			# Check to see if the email and password are connected to a player account
+			$sch_sql = "SELECT COUNT(*) FROM coachaccount WHERE Email=:email AND Password=:password;";
+			$pl_statement = $pdo->prepare($pl_sql);
+			$pl_statement->bindValue(':email', $email);
+			$pl_statement->bindValue(':password', $password);
+			$pl_statement->execute();
+			$pl_rowCount = $pl_statement->fetchColumn(0);
 
 			if($sch_rowCount == 1) {
 				$ss_sql = "SELECT * FROM schoolaccount WHERE Email=:email AND Password=:password;";
 				$ss_statement = $pdo->prepare($ss_sql);
 				$ss_statement->bindValue(':email', $email);
-				$ss_statement->bindValue(':password', $password);
+				$ss_statement->bindValue(':password', md5($password));
 				$ss_statement->execute();
 				$ss_row = $ss_statement->fetch(PDO::FETCH_ASSOC);
-
-				$_SESSION['schoolid'] = $ss_row['SchoolID'];
-				$_SESSION['schoolname'] = $ss_row['SchoolName'];
 				$pdo = null;
 				header('Location: team.php');
+			} elseif ($pl_rowCount == 1) {
+				$sch_sql = "SELECT COUNT(*) FROM coachaccount WHERE Email=:email AND Password=:password;";
+				$ss_statement = $pdo->prepare($ss_sql);
+				$ss_statement->bindValue(':email', $email);
+				$ss_statement->bindValue(':password', md5($password));
+				$ss_statement->execute();
+				$ss_row = $ss_statement->fetch(PDO::FETCH_ASSOC);
+				$_SESSION['ID'] = $ss_row['ID'];
+				$pdo = null;
+				header('Location: teamscoach.php');
 			}
-
+			 else {
+				header('Location: index.php?error=failed_login');
+			}
 			$pdo = null;
 		}
 		catch (PDOException $e) {
 			die($e->getMessage());
 		}
 	}
-
-
+	# Set the error message if an unauthorized user tries to access a page
+	if(isset($_GET['error'])) {
+		$error = true;
+		if($_GET['error']=='session') {
+			$error_message = 'Please log in or create an account to use NJITsoccer.';
+		} elseif($_GET['error']=='session_player') {
+			$error_message = 'You must be logged in on a player account to view this page.';
+		} elseif($_GET['error']=='session_school') {
+			$error_message = 'You must be logged in on a school account to view this page.';
+		} elseif($_GET['error']=='session_rs') {
+			$error_message = 'You must be logged in on a school or referee account to view this page.';
+		} elseif($_GET['error']=='failed_login') {
+			$error_message = 'Username or password incorrect';
+		}
+	}
 ?>
 
 <!DOCTYPE html>
@@ -78,7 +101,7 @@
 								<form method="post" action="index.php" id="loginform">
 									<div class="form-group">
 										<label class="control-label" for="email">Email Address</label>
-										<input type="email" class="form-control" id="email" name="email" required data-toggle="tooltip" data-placement="left" title="Enter bsmith@tech.edu for school account and justinb31@tech.edu for player account"/>
+										<input type="email" class="form-control" id="email" name="email" required data-toggle="tooltip" data-placement="left"/>
 										<span class="text-danger"><small></small></span>
 									</div>
 									<div class="form-group">
